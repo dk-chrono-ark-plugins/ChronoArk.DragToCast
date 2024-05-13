@@ -3,20 +3,33 @@ using GameDataEditor;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-namespace DragToCast.Implementation;
+namespace DragToCast.Implementation.Components;
 
 #nullable enable
 
 internal class DragBehaviour : MonoBehaviour
 {
+    internal static DragBehaviour? CurrentDragging { get; private set; }
     internal bool IsDragging { get; private set; }
     internal bool SelfActive { get; private set; }
-    private SkillButton? SkillButton => gameObject.GetComponent<SkillButton>();
-    private BasicSkill? BasicSkill => gameObject.GetComponentInParent<BasicSkill>();
+    internal SkillButton? SkillButton => gameObject.GetComponent<SkillButton>();
+    internal BasicSkill? BasicSkill => gameObject.GetComponentInParent<BasicSkill>();
+    internal Skill? Myskill => SkillButton?.Myskill ?? BasicSkill?.buttonData;
+    internal bool Interactable
+    {
+        get
+        {
+            if (BasicSkill != null) {
+                return BasicSkill.interactable;
+            }
+            if (SkillButton != null) {
+                return SkillButton.interactable || (BattleSystem.instance != null && BattleSystem.instance.AllyTeam.DiscardCount > 0);
+            }
+            return true;
+        }
+    }
     private string AnimationActivateValue => BasicSkill != null ? "Using" : "Selected";
-    private Skill? Myskill => SkillButton?.Myskill ?? BasicSkill?.buttonData;
 
     private void Start()
     {
@@ -30,6 +43,7 @@ internal class DragBehaviour : MonoBehaviour
     {
         IsDragging = false;
         SelfActive = false;
+        CurrentDragging = null;
         CastingLineRenderer.Instance?.Clear();
     }
 
@@ -61,53 +75,77 @@ internal class DragBehaviour : MonoBehaviour
 
     private void OnDrag(BaseEventData data)
     {
+        if (!Interactable) {
+            return;
+        }
+
         IsDragging = true;
+        CurrentDragging = this;
         var rect = GetComponent<RectTransform>() ?? throw new MissingComponentException();
         CastingLineRenderer.Instance?.DrawToPointer(rect.position, CastingLineRenderer.Curvature.BezierQuadratic);
     }
 
     private void OnEndDrag(BaseEventData data)
     {
-        var hovering = HoverBehaviour.CurrentHovering;
+        if (!Interactable) {
+            return;
+        }
 
-        if (IsCastOnClick(Myskill!) && hovering != gameObject) {
+        var hovering = HoverBehaviour.CurrentHovering;
+        if (IsCastOnClick(Myskill!) && hovering != gameObject && (BasicSkill == null || BasicSkill.buttonData.Master.gameObject != hovering?.gameObject)) {
+            // consume on click and not self cast
             ActivateSkill();
-        } else {
-            if (hovering == null) {
-                // released on empty 
+        } else if (hovering == null) {
+            // released on empty
+            if (SelfActive) {
                 PreActivateSkill(activate: false);
-            } else if (hovering == gameObject) {
-                // released on self, do nothing
-                // let game handle its own click
-            } else if (hovering.GetComponent<BattleChar>() != null) {
-                // released on a target
-                var target = hovering.GetComponent<BattleChar>();
-                if (BattleSystem.IsSelect(target, Myskill)) {
-                    target.Click();
-                } else {
+            }
+        } else if (hovering == gameObject) {
+            // released on self, do nothing
+            // let game handle its own click
+        } else if (hovering.TryGetComponent<BattleChar>(out var target)) {
+            // released on a target
+            // we don't cast consume on click skills on self
+            // must drag it out
+            if (BattleSystem.IsSelect(target, Myskill!) && (!IsCastOnClick(Myskill!) || target != Myskill!.Master)) {
+                target.Click();
+            } else {
+                PreActivateSkill(activate: false);
+            }
+        } else if (hovering.TryGetComponent<BasicSkill>(out var basic)) {
+            // this happens rarely but does exit
+            // so we are actually aiming the ally char
+            var ally = basic.buttonData.Master;
+            if (BasicSkill != null && BasicSkill.buttonData.Master == ally) {
+                // if we are dragging a basic skill on itself
+                // this won't fall into first comparison because
+                // BasicSkill are attached to its parent object
+                if (SelfActive) {
                     PreActivateSkill(activate: false);
                 }
-            } else if (hovering.GetComponent<TrashButton>() != null) {
-                // released on trashcan
-                SkillButton?.WasteButton.transform
-                    .GetFirstNestedChildWithName("Align/Collider")?
-                    .GetComponent<Button>()
-                    .onClick.Invoke();
+            } else if (BattleSystem.IsSelect(ally, Myskill!)) {
+                ally.Click();
             } else {
-                hovering.GetComponent<BasicSkill>()?.Click();
-                hovering.GetComponent<SkillButton>()?.Click();
+                PreActivateSkill(activate: false);
             }
+        } else if (hovering.TryGetComponent<TrashButton>(out var _)) {
+            // released skill cards on trashcan
+            SkillButton?.ClickWaste();
+        } else if (hovering.TryGetComponent<SkillButton>(out var skill)) {
+            // try release on skill button
+            skill.Click();
+        } else {
+            // something bad probably happened in code
+            // but we cope
+            PreActivateSkill(activate: false);
         }
         OnDestroy();
     }
 
     private void OnPointerExit(BaseEventData data)
     {
-        if (IsDragging && !SelfActive) {
-            // we don't pre activate Misc skills cuz they consume on click
-            if (!IsCastOnClick(Myskill!)) {
-                PreActivateSkill(activate: true);
-            }
+        if (IsDragging && !SelfActive && CurrentDragging == this && !IsCastOnClick(Myskill!)) {
+            PreActivateSkill(activate: true);
         }
     }
 }

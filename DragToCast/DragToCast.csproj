@@ -419,15 +419,16 @@
     <Compile Include="DragToCastKeys.cs" />
     <Compile Include="DragToCastMod.cs" />
     <Compile Include="Helper\ChildrenIterator.cs" />
+    <Compile Include="Helper\ComponentFetch.cs" />
     <Compile Include="Helper\EventTriggerMerge.cs" />
     <Compile Include="Helper\TextureBlitter.cs" />
     <Compile Include="Implementation\BasicSkillPatch.cs" />
     <Compile Include="Implementation\BattleCharPatch.cs" />
-    <Compile Include="Implementation\CastingLineRenderer.cs" />
+    <Compile Include="Implementation\Components\CastingLineRenderer.cs" />
     <Compile Include="Implementation\BattleSystemPatch.cs" />
     <Compile Include="Helper\BezierLineSmoother.cs" />
-    <Compile Include="Implementation\DragBehaviour.cs" />
-    <Compile Include="Implementation\HoverBehaviour.cs" />
+    <Compile Include="Implementation\Components\DragBehaviour.cs" />
+    <Compile Include="Implementation\Components\HoverBehaviour.cs" />
     <Compile Include="Implementation\SkillButtonPatch.cs" />
   </ItemGroup>
   <ItemGroup>

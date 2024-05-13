@@ -1,4 +1,5 @@
 ﻿using DragToCast.Api;
+using DragToCast.Implementation.Components;
 using HarmonyLib;
 
 namespace DragToCast.Implementation;
@@ -33,6 +34,6 @@ internal class BasicSkillPatch(string guid) : IPatch
         }
 
         __instance.PadTarget.gameObject.AddComponent<DragBehaviour>();
-        __instance.PadTarget.gameObject.AddComponent<HoverBehaviour>();
+        __instance.gameObject.AddComponent<HoverBehaviour>();
     }
 }

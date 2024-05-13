@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DragToCast.Implementation;
+namespace DragToCast.Implementation.Components;
 
 #nullable enable
 

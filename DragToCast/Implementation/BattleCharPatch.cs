@@ -1,4 +1,5 @@
 ﻿using DragToCast.Api;
+using DragToCast.Implementation.Components;
 using HarmonyLib;
 
 namespace DragToCast.Implementation;
@@ -33,6 +34,6 @@ internal class BattleCharPatch(string guid) : IPatch
         }
 
         _ = __instance.gameObject.GetComponent<HoverBehaviour>()
-        ?? __instance.gameObject.AddComponent<HoverBehaviour>();
+            ?? __instance.gameObject.AddComponent<HoverBehaviour>();
     }
 }
