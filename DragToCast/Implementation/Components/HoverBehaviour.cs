@@ -49,7 +49,9 @@ internal class HoverBehaviour : MonoBehaviour
         LastHovering = CurrentHovering;
         CurrentHovering = fixedObject;
 
-        if (DragBehaviour.CurrentDragging?.BasicSkill == null &&
+        if (DragBehaviour.CurrentDragging != null &&
+            DragBehaviour.CurrentDragging.IsDragging &&
+            DragBehaviour.CurrentDragging.BasicSkill == null &&
             fixedObject.GetComponent<TrashButton>() != null &&
             BattleSystem.instance != null &&
             BattleSystem.instance.AllyTeam.DiscardCount > 0) {
@@ -71,8 +73,9 @@ internal class HoverBehaviour : MonoBehaviour
             CurrentHovering = null;
         }
 
-        basic = DragBehaviour.CurrentDragging?.BasicSkill;
-        if (basic == null) {
+        if (DragBehaviour.CurrentDragging != null &&
+            DragBehaviour.CurrentDragging.IsDragging &&
+            DragBehaviour.CurrentDragging.BasicSkill == null) {
             fixedObject.GetComponent<TrashButton>()?.Quit();
         }
     }
