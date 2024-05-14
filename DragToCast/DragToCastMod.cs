@@ -24,9 +24,12 @@ public class DragToCastMod : ChronoArkPlugin
 
         var guid = GetGuid();
         _patches.Add(new BattleSystemPatch(guid));
+
         _patches.Add(new BattleCharPatch(guid));
         _patches.Add(new BasicSkillPatch(guid));
         _patches.Add(new SkillButtonPatch(guid));
+
+        _patches.Add(new CursorPatch(guid));
 
         foreach (var patch in _patches) {
             if (patch.Mandatory) {

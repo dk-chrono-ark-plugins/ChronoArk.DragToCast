@@ -428,6 +428,7 @@
     <Compile Include="Helper\BezierLineSmoother.cs" />
     <Compile Include="Implementation\Components\DragBehaviour.cs" />
     <Compile Include="Implementation\Components\HoverBehaviour.cs" />
+    <Compile Include="Implementation\Patches\CursorPatch.cs" />
     <Compile Include="Implementation\Patches\SkillButtonPatch.cs" />
   </ItemGroup>
   <ItemGroup>
