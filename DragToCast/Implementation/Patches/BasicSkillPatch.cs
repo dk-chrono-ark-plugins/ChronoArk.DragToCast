@@ -2,15 +2,15 @@
 using DragToCast.Implementation.Components;
 using HarmonyLib;
 
-namespace DragToCast.Implementation;
+namespace DragToCast.Implementation.Patches;
 
 #nullable enable
 
-internal class BattleCharPatch(string guid) : IPatch
+internal class BasicSkillPatch(string guid) : IPatch
 {
     private Harmony? _harmony;
 
-    public string Id => "battle-char";
+    public string Id => "basic-skill";
     public string Name => Id;
     public string Description => Id;
     public bool Mandatory => true;
@@ -20,20 +20,20 @@ internal class BattleCharPatch(string guid) : IPatch
         _harmony ??= new(guid);
         _harmony.Patch(
             original: AccessTools.Method(
-                typeof(BattleChar),
-                nameof(BattleChar.Update)
+                typeof(BasicSkill),
+                "Start"
             ),
-            postfix: new(typeof(BattleCharPatch), nameof(OnUpdate))
+            postfix: new(typeof(BasicSkillPatch), nameof(OnStart))
         );
     }
 
-    private static void OnUpdate(BattleChar __instance)
+    private static void OnStart(BasicSkill __instance)
     {
         if (BattleSystem.instance == null) {
             return;
         }
 
-        _ = __instance.gameObject.GetComponent<HoverBehaviour>()
-            ?? __instance.gameObject.AddComponent<HoverBehaviour>();
+        __instance.PadTarget.gameObject.AddComponent<DragBehaviour>();
+        __instance.gameObject.AddComponent<HoverBehaviour>();
     }
 }

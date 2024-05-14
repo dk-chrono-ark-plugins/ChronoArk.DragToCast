@@ -1,6 +1,6 @@
 ﻿using ChronoArkMod.Plugin;
 using DragToCast.Api;
-using DragToCast.Implementation;
+using DragToCast.Implementation.Patches;
 using System.Collections.Generic;
 using UnityEngine;
 

@@ -2,7 +2,7 @@
 using DragToCast.Implementation.Components;
 using HarmonyLib;
 
-namespace DragToCast.Implementation;
+namespace DragToCast.Implementation.Patches;
 
 #nullable enable
 
