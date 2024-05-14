@@ -2,7 +2,8 @@ Add drag to cast behaviour into skills, akin to the mechanics in Slay the Spire.
 
 > source: https://github.com/gottyduke/ChronoArk.DragToCast
 
-![demo](https://i.postimg.cc/Bn5T2Fdc/drag-to-cast-demo.gif)
+![demo1](https://i.postimg.cc/k5XXcjJc/drag-to-cast-demo.gif)
+![demo2](https://i.postimg.cc/L8PzS8L7/drag-to-cast-demo-2.gif)
 
 
 You can:
@@ -17,11 +18,13 @@ Not supported:
 
 
 Planned updates:
-- **Any potential bugs**
-- ~~Larger enemy & ally collider box~~ Fixed
-- Better line visuals
-- Item/Equipment drag to use
-- Feedback & requests
+- [x] **Any potential bugs**
+- [x] ~~Larger enemy & ally collider box~~ Fixed
+- [x] ~~Better line visuals~~ Thanks to **AnriMachishiro, 七叶咕咕** !
+- [ ] Enhance consume-on-click skills' pre activation visuals
+- [ ] Add/Improve some UI elements when dragging
+- [ ] Item/Equipment drag to use
+- [ ] Feedback & requests
 
 
 **Q**: Can I preview skill targets when dragging?
@@ -32,3 +35,8 @@ Planned updates:
 
 **Q**: Can X features be added, and Y bugs fixed?
 **A**: Yes, if you provide feedback.
+
+
+**Credit**: 
+- **AnriMachishiro** for the invaluable feedback and tests.
+- **七叶咕咕** for the amazing artwork used for line rendering.

@@ -2,7 +2,8 @@
 
 > source: https://github.com/gottyduke/ChronoArk.DragToCast
 
-![demo](https://i.postimg.cc/Bn5T2Fdc/drag-to-cast-demo.gif)
+![demo1](https://i.postimg.cc/k5XXcjJc/drag-to-cast-demo.gif)
+![demo2](https://i.postimg.cc/L8PzS8L7/drag-to-cast-demo-2.gif)
 
 
 你可以:
@@ -12,16 +13,18 @@
 - 无意义拖拽
 
 
-不支持:
+不可以:
 - 多目标拖拽，因为线很难画
 
 
 计划更新:
-- **修复bug**
-- ~~更大的敌人/队员判定框~~ 已优化
-- 好看的线
-- 物品/装备拖拽使用
-- 反馈和意见
+- [x] **修复bug**
+- [x] ~~更大的敌人/队员判定框~~ 已优化
+- [x] ~~好看的线~~ 感谢 **AnriMachishiro, 七叶咕咕** !
+- [ ] 优化点击即用卡牌的施法预备效果
+- [ ] 添加/改善部分拖拽状态下的UI控件
+- [ ] 物品/装备拖拽使用
+- [ ] 反馈和意见
 
 
 **问**：在拖拽时可以预览技能目标吗？
@@ -32,3 +35,8 @@
 
 **问**：可以添加X功能和修复Y BUG吗？
 **答**：可以，只要你提供反馈。
+
+
+**致谢**：
+- **AnriMachishiro** 提供了宝贵的反馈和测试。
+- **七叶咕咕** 提供了用于渲染线条的美丽素材。
