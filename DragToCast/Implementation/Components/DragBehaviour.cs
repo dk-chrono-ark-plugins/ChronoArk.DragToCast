@@ -10,6 +10,10 @@ namespace DragToCast.Implementation.Components;
 
 internal class DragBehaviour : MonoBehaviour
 {
+    internal CastingLineRenderer.Curvature _curvature = CastingLineRenderer.Curvature.BezierQuadratic;
+
+    private bool _setToCancel;
+
     internal static DragBehaviour? CurrentDragging { get; private set; }
     internal bool IsDragging { get; private set; }
     internal bool SelfActive { get; private set; }
@@ -39,12 +43,30 @@ internal class DragBehaviour : MonoBehaviour
         eventTrigger.AddOrMergeTrigger(EventTriggerType.PointerExit, OnPointerExit);
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButton(1) &&
+            IsDragging && CurrentDragging == this) {
+            SetToCancel();
+        }
+    }
+
     private void OnDestroy()
     {
         IsDragging = false;
         SelfActive = false;
         CurrentDragging = null;
         CastingLineRenderer.Instance?.Clear();
+        BattleSystem.instance?.ActWindow.TargetSelectText.SetActive(value: false);
+    }
+
+    private void SetToCancel()
+    {
+        _setToCancel = true;
+        if (SelfActive) {
+            PreActivateSkill(activate: false);
+        }
+        OnDestroy();
     }
 
     private void ActivateSkill()
@@ -75,19 +97,22 @@ internal class DragBehaviour : MonoBehaviour
 
     private void OnDrag(BaseEventData data)
     {
-        if (!Interactable) {
+        if (!Interactable || _setToCancel) {
+            ((PointerEventData)data).pointerDrag = null;
+            _setToCancel = false;
             return;
         }
 
         IsDragging = true;
         CurrentDragging = this;
-        var rect = GetComponent<RectTransform>() ?? throw new MissingComponentException();
-        CastingLineRenderer.Instance?.DrawToPointer(rect.position, CastingLineRenderer.Curvature.BezierQuadratic);
+        BattleSystem.instance?.ActWindow.TargetSelectText.SetActive(value: true);
+        CastingLineRenderer.Instance?.DrawToPointer(GetComponent<RectTransform>().position, _curvature);
     }
 
     private void OnEndDrag(BaseEventData data)
     {
-        if (!Interactable) {
+        if (!Interactable || _setToCancel || ((PointerEventData)data).pointerDrag == null) {
+            _setToCancel = false;
             return;
         }
 
@@ -133,11 +158,13 @@ internal class DragBehaviour : MonoBehaviour
             SkillButton?.ClickWaste();
         } else if (hovering.TryGetComponent<SkillButton>(out var skill)) {
             // try release on skill button
-            skill.Click();
-        } else {
-            // something bad probably happened in code
-            // but we cope
-            PreActivateSkill(activate: false);
+            if (Myskill!.TargetTypeKey == GDEItemKeys.s_targettype_skill ||
+                Myskill!.TargetTypeKey == GDEItemKeys.s_targettype_allskill) {
+                skill.Click();
+            }
+            if (SelfActive) {
+                PreActivateSkill(activate: false);
+            }
         }
         OnDestroy();
     }
