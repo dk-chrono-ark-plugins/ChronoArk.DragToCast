@@ -45,9 +45,10 @@ internal class DragBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(1) &&
-            IsDragging && CurrentDragging == this) {
-            SetToCancel();
+        if (IsDragging && CurrentDragging == this) {
+            if (Input.GetMouseButton(1)) {
+                SetToCancel();
+            }
         }
     }
 
