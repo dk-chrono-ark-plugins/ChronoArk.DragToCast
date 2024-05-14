@@ -18,13 +18,13 @@ Not supported:
 
 
 Planned updates:
-- [x] **Any potential bugs**
-- [x] ~~Larger enemy & ally collider box~~ Fixed
-- [x] ~~Better line visuals~~ Thanks to **AnriMachishiro, 七叶咕咕** !
-- [ ] Enhance consume-on-click skills' pre activation visuals
-- [ ] Add/Improve some UI elements when dragging
-- [ ] Item/Equipment drag to use
-- [ ] Feedback & requests
+- ☑️**Any potential bugs**
+- ☑️ ~~Larger enemy & ally collider box~~ Fixed
+- ☑️ ~~Better line visuals~~ Thanks to **AnriMachishiro, 七叶咕咕** !
+- 🔳Enhance consume-on-click skills' pre activation visuals
+- 🔳Add/Improve some UI elements when dragging
+- 🔳Item/Equipment drag to use
+- 🔳Feedback & requests
 
 
 **Q**: Can I preview skill targets when dragging?
