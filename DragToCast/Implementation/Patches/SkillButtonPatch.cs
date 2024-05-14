@@ -1,4 +1,5 @@
 ﻿using DragToCast.Api;
+using DragToCast.Helper;
 using DragToCast.Implementation.Components;
 using HarmonyLib;
 
@@ -33,7 +34,7 @@ internal class SkillButtonPatch(string guid) : IPatch
             return;
         }
 
-        __instance.gameObject.AddComponent<DragBehaviour>();
-        __instance.gameObject.AddComponent<HoverBehaviour>();
+        __instance.gameObject.GetOrAddComponent<DragBehaviour>();
+        __instance.gameObject.GetOrAddComponent<HoverBehaviour>();
     }
 }

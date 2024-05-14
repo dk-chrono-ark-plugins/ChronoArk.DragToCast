@@ -1,4 +1,5 @@
 ﻿using DragToCast.Api;
+using DragToCast.Helper;
 using DragToCast.Implementation.Components;
 using HarmonyLib;
 
@@ -29,7 +30,7 @@ internal class BattleSystemPatch(string guid) : IPatch
 
     private static void OnStart(BattleSystem __instance)
     {
-        __instance.gameObject.AddComponent<CastingLineRenderer>();
-        __instance.ActWindow.TrashButton.AddComponent<HoverBehaviour>();
+        __instance.gameObject.GetOrAddComponent<CastingLineRenderer>();
+        __instance.ActWindow.TrashButton.GetOrAddComponent<HoverBehaviour>();
     }
 }

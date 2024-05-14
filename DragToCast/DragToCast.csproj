@@ -416,7 +416,6 @@
   <ItemGroup>
     <Compile Include="Api\IConfigurable.cs" />
     <Compile Include="Api\IPatch.cs" />
-    <Compile Include="DragToCastKeys.cs" />
     <Compile Include="DragToCastMod.cs" />
     <Compile Include="Helper\ChildrenIterator.cs" />
     <Compile Include="Helper\ComponentFetch.cs" />
