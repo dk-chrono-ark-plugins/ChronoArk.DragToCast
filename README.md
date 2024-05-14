@@ -1,4 +1,4 @@
-﻿# Chrono Ark DragToCast
+﻿# Chrono Ark Drag To Cast
 Add drag to cast behaviour into skills, akin to the mechanics in Slay the Spire.
 ![demo](assets/drag_to_cast_demo.gif)
 
