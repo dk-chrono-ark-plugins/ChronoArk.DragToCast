@@ -2,9 +2,6 @@
 
 > source: https://github.com/gottyduke/ChronoArk.DragToCast
 
-![demo1](https://i.postimg.cc/k5XXcjJc/drag-to-cast-demo.gif)
-![demo2](https://i.postimg.cc/L8PzS8L7/drag-to-cast-demo-2.gif)
-
 
 你可以:
 - 拖拽技能卡

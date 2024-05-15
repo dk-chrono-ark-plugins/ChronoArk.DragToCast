@@ -2,9 +2,6 @@ Add drag to cast behaviour into skills, akin to the mechanics in Slay the Spire.
 
 > source: https://github.com/gottyduke/ChronoArk.DragToCast
 
-![demo1](https://i.postimg.cc/k5XXcjJc/drag-to-cast-demo.gif)
-![demo2](https://i.postimg.cc/L8PzS8L7/drag-to-cast-demo-2.gif)
-
 
 You can:
 - Drag Skills Cards
@@ -39,4 +36,4 @@ Planned updates:
 
 **Credit**: 
 - **AnriMachishiro** for the invaluable feedback and tests.
-- **七叶咕咕** for the amazing artwork used for line rendering.
+- **七叶咕咕** for their amazing artwork used for line rendering.
