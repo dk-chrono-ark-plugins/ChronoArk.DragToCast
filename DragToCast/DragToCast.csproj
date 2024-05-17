@@ -422,6 +422,7 @@
     <Compile Include="DragToCastMod.cs" />
     <Compile Include="Helper\ChildrenIterator.cs" />
     <Compile Include="Helper\ComponentFetch.cs" />
+    <Compile Include="Helper\DelayedCoroutine.cs" />
     <Compile Include="Helper\EventTriggerMerge.cs" />
     <Compile Include="Helper\SkillTargetTypeCheck.cs" />
     <Compile Include="Helper\TextureBlitter.cs" />

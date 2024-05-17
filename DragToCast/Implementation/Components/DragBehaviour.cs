@@ -28,29 +28,15 @@ internal class DragBehaviour : HoverBehaviour, IDraggable
     {
         _isDragging = false;
         CurrentDragging = null;
-
-        CastingLineRenderer.Instance?.Clear();
-        BattleSystem.instance?.ActWindow.TargetSelectText.SetActive(value: false);
     }
 
     public virtual void OnDrag(PointerEventData eventData)
     {
         if (_setToCancel || !Interactable) {
             OnDestroy();
-            return;
-        }
-
-        if (BattleSystem.instance != null) {
-            var clr = CastingLineRenderer.Instance;
-            if (clr != null) {
-                clr.DrawToPointer(
-                    GetComponent<RectTransform>().position,
-                    CastingLineRenderer.Curvature.BezierQuadratic
-                );
-                _isDragging = true;
-                CurrentDragging = this;
-                BattleSystem.instance?.ActWindow.TargetSelectText.SetActive(value: true);
-            }
+        } else {
+            _isDragging = true;
+            CurrentDragging = this;
         }
     }
 
