@@ -1,4 +1,7 @@
-﻿using DragToCast.Helper;
+﻿using DragToCast.Api;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,77 +9,45 @@ namespace DragToCast.Implementation.Components;
 
 #nullable enable
 
-internal class HoverBehaviour : MonoBehaviour
+internal class HoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ITarget
 {
-    /// <summary>
-    /// This will be the stack to the actual <see cref="GameObject"/> holder <br/>
-    /// e.g. <see cref="BattleChar"/>, <see cref="SkillButton"/>, 
-    /// <see cref="BasicSkill"/>, <see cref="TrashButton"/>
-    /// </summary>
-    internal static GameObject? CurrentHovering { get; private set; }
-    private static GameObject? LastHovering { get; set; }
-
-    private void Start()
+    private static readonly List<HoverBehaviour> _hoverHierarchy = [];
+    internal static ITarget? CurrentTarget
     {
-        var attachObject = gameObject;
-        if (gameObject.TryGetComponent<BattleEnemy>(out var enemy)) {
-            // attach to spritecollider for BattleEnemy
-            attachObject = enemy.SpriteCollider.gameObject;
-            // some UI elements block a small region
-            // of BattleEnemy sprite, patch that too
-            AttachTrigger(enemy.MyUIObject.tooltip.gameObject);
-            var buffList = enemy.MyUIObject.transform.GetFirstChildWithName("AlignBuff");
-            if (buffList != null) {
-                AttachTrigger(buffList.gameObject);
-            }
-        } else if (gameObject.TryGetComponentInParent<BasicSkill>(out var basic)) {
-            // attach to PadTarget but fix on actual skill
-            attachObject = basic.PadTarget.gameObject;
-        }
-
-        AttachTrigger(attachObject);
-    }
-
-    private void AttachTrigger(GameObject attachObject)
-    {
-        var eventTrigger = attachObject.GetComponent<EventTrigger>() ?? attachObject.AddComponent<EventTrigger>();
-        eventTrigger.AddOrMergeTrigger(EventTriggerType.PointerEnter, (_) => OnPointerEnter(gameObject));
-        eventTrigger.AddOrMergeTrigger(EventTriggerType.PointerExit, (_) => OnPointerExit(gameObject));
-    }
-
-    private void OnPointerEnter(GameObject fixedObject)
-    {
-        LastHovering = CurrentHovering;
-        CurrentHovering = fixedObject;
-
-        if (DragBehaviour.CurrentDragging != null &&
-            DragBehaviour.CurrentDragging.IsDragging &&
-            DragBehaviour.CurrentDragging.BasicSkill == null &&
-            fixedObject.GetComponent<TrashButton>() != null &&
-            BattleSystem.instance != null &&
-            BattleSystem.instance.AllyTeam.DiscardCount > 0) {
-            BattleSystem.instance.WasteMode = true;
+        get
+        {
+            _hoverHierarchy.RemoveAll(go => go == null);
+            return _hoverHierarchy.LastOrDefault();
         }
     }
 
-    private void OnPointerExit(GameObject fixedObject)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        // we need to re-assign the topology to the underlying BattleAlly
-        if (LastHovering != null &&
-            LastHovering.TryGetComponent<BattleAlly>(out var ally) &&
-            CurrentHovering != null &&
-            CurrentHovering.TryGetComponent<BasicSkill>(out var basic) &&
-            basic.buttonData.Master.gameObject == ally.gameObject) {
-            CurrentHovering = LastHovering;
-            LastHovering = null;
-        } else {
-            CurrentHovering = null;
-        }
+        Enter(this);
+    }
 
-        if (DragBehaviour.CurrentDragging != null &&
-            DragBehaviour.CurrentDragging.IsDragging &&
-            DragBehaviour.CurrentDragging.BasicSkill == null) {
-            fixedObject.GetComponent<TrashButton>()?.Quit();
-        }
+    public virtual void OnPointerExit(PointerEventData eventData)
+    {
+        Exit(this);
+    }
+
+    public virtual void Accept(ICastable castable)
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual bool IsValidTargetOf(ICastable castable)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected static void Enter(HoverBehaviour ho)
+    {
+        _hoverHierarchy.Add(ho);
+    }
+
+    protected static void Exit(HoverBehaviour ho)
+    {
+        _hoverHierarchy.Remove(ho);
     }
 }

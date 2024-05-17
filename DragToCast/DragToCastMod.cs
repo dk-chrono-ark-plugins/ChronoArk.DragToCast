@@ -1,6 +1,7 @@
 ﻿using ChronoArkMod.Plugin;
 using DragToCast.Api;
 using DragToCast.Implementation.Patches;
+using HarmonyLib;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,26 +11,29 @@ namespace DragToCast;
 
 public class DragToCastMod : ChronoArkPlugin
 {
-    public static DragToCastMod? Instance;
+    private static DragToCastMod? _instance;
     private readonly List<IPatch> _patches = [];
+
+    public static DragToCastMod? Instance => _instance;
+    internal Harmony? _harmony;
 
     public override void Dispose()
     {
-        Instance = null;
+        _instance = null;
     }
 
     public override void Initialize()
     {
-        Instance ??= this;
+        _instance = this;
+        _harmony = new(GetGuid());
 
-        var guid = GetGuid();
-        _patches.Add(new BattleSystemPatch(guid));
+        _patches.Add(new BattleSystemPatch());
 
-        _patches.Add(new BattleCharPatch(guid));
-        _patches.Add(new BasicSkillPatch(guid));
-        _patches.Add(new SkillButtonPatch(guid));
+        _patches.Add(new BattleCharPatch());
+        _patches.Add(new BasicSkillPatch());
+        _patches.Add(new SkillButtonPatch());
 
-        _patches.Add(new CursorPatch(guid));
+        _patches.Add(new HoverUIPatch());
 
         foreach (var patch in _patches) {
             if (patch.Mandatory) {

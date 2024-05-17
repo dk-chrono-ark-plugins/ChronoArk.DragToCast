@@ -3,10 +3,12 @@ using ChronoArkMod.ModData;
 using DragToCast.Helper;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DragToCast.Implementation.Components;
 
 #nullable enable
+#pragma warning disable CS0162 // Unreachable code detected
 
 internal class CastingLineRenderer : MonoBehaviour
 {
@@ -30,14 +32,15 @@ internal class CastingLineRenderer : MonoBehaviour
     public const string LineHeadTextureFile = "arrowhead_anri_gave_me_must_use_with_caution.png";
     public const bool UseMyBelovedManaCrystal = false;
 
-    public static CastingLineRenderer? Instance;
-    private static TextureOrientation _lineHeadOrientation = TextureOrientation.Right;
+    private static TextureOrientation _lineHeadOrientation;
 
     private Canvas? _canvas;
     private LineRenderer? _lineRenderer;
     private Texture2D? _lineTexture;
-    private Texture2D? _lineHeadTexture;
     private SpriteRenderer? _lineHeadRenderer;
+
+    public static CastingLineRenderer? Instance => BattleSystem.instance?.gameObject.GetOrAddComponent<CastingLineRenderer>();
+    public bool IsRendering => _lineRenderer?.enabled ?? false;
 
     private int TextureOrientationOffset
     {
@@ -55,29 +58,25 @@ internal class CastingLineRenderer : MonoBehaviour
 
     private void Start()
     {
-        Instance = this;
-
         var system = GetComponent<BattleSystem>() ?? throw new MissingComponentException(nameof(BattleSystem));
         if (UseMyBelovedManaCrystal) {
-            /**
             var manaSprite = system.ActWindow.APObject.transform
                 .GetFirstChildWithName("On")?
                 .GetComponent<Image>()
                 .sprite ?? throw new MissingComponentException();
             _lineTexture = manaSprite.texture.Blit(manaSprite.textureRect);
-            /**/
+            _lineHeadOrientation = TextureOrientation.Right;
         } else {
-            _lineHeadOrientation = TextureOrientation.Down;
             _lineTexture = LoadAssetInternal(LineTextureFile);
+            _lineHeadOrientation = TextureOrientation.Down;
         }
         _lineTexture.wrapMode = TextureWrapMode.Repeat;
-        _lineHeadTexture = LoadAssetInternal(LineHeadTextureFile);
 
         _canvas = system.MainUICanvas;
         _lineHeadRenderer = gameObject.AddComponent<SpriteRenderer>();
         _lineHeadRenderer.sortingLayerName = _canvas.sortingLayerName;
         _lineHeadRenderer.sortingOrder = short.MaxValue;
-        _lineHeadRenderer.sprite = Misc.CreatSprite(_lineHeadTexture);
+        _lineHeadRenderer.sprite = Misc.CreatSprite(LoadAssetInternal(LineHeadTextureFile));
 
         _lineRenderer = gameObject.AddComponent<LineRenderer>();
         _lineRenderer.sortingLayerName = _canvas.sortingLayerName;

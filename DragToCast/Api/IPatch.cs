@@ -1,9 +1,9 @@
 ﻿namespace DragToCast.Api;
 
-public interface IPatch : IConfigurable
+internal interface IPatch : IConfigurable
 {
     /// <summary>
     /// The patch itself
     /// </summary>
-    public void Commit();
+    void Commit();
 }
