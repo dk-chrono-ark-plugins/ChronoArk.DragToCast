@@ -1,4 +1,5 @@
 ﻿using DragToCast.Api;
+using DragToCast.Helper;
 
 namespace DragToCast.Implementation.Components.Skills;
 
@@ -7,7 +8,7 @@ namespace DragToCast.Implementation.Components.Skills;
 internal class BasicSkillBehaviour : DraggableSkill
 {
     public override bool Interactable => SkillImpl?.interactable ?? false;
-    public override bool IsDelayed => Interactable && (!SkillImpl?.MainAni.GetBool("Enable") ?? false);
+    public override bool IsDelayed => !SkillImpl!.MainAni.GetBool("Enable");
     public override ICastable.CastingType CastType => ICastable.CastingType.BasicSkill;
     public override Skill SkillData => SkillImpl!.buttonData;
     public override bool IsSelfActive => SkillImpl?.MainAni.GetBool("Using") ?? false;
@@ -28,6 +29,25 @@ internal class BasicSkillBehaviour : DraggableSkill
 
     public override bool IsValidTargetOf(ICastable castable)
     {
-        return BattleSystem.IsSelect(SkillData.Master, castable.SkillData);
+        return !castable.SkillData.IsCastOnClick()
+            && BattleSystem.IsSelect(SkillData.Master, castable.SkillData);
+    }
+
+    public override void PreActivateSkill()
+    {
+        if (SkillData.IsCastOnClick()) {
+            SkillImpl?.MainAni?.SetBool("Using", true);
+        } else if (!IsSelfActive) {
+            Cast();
+        }
+    }
+
+    public override void DeactivateSkill()
+    {
+        if (SkillData.IsCastOnClick()) {
+            SkillImpl?.MainAni?.SetBool("Using", false);
+        } else if (IsSelfActive) {
+            Cast();
+        }
     }
 }

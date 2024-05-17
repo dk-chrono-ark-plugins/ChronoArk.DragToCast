@@ -1,6 +1,7 @@
 ﻿using DragToCast.Api;
 using DragToCast.Helper;
 using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DragToCast.Implementation.Components.Skills;
@@ -14,9 +15,34 @@ internal class DraggableSkill : DragBehaviour, ICastable
     public virtual Skill SkillData => throw new NotImplementedException();
     public virtual bool IsSelfActive { get; }
 
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        CastingLineRenderer.Instance?.Clear();
+        BattleSystem.instance?.ActWindow.TargetSelectText.SetActive(value: false);
+    }
+
     public virtual void Cast()
     {
         throw new NotImplementedException();
+    }
+
+    public override void OnDrag(PointerEventData eventData)
+    {
+        base.OnDrag(eventData);
+
+        if (!_isDragging) {
+            return;
+        }
+
+        if (BattleSystem.instance != null) {
+            CastingLineRenderer.Instance?.DrawToPointer(
+                GetComponent<RectTransform>().position,
+                CastingLineRenderer.Curvature.BezierQuadratic
+            );
+            BattleSystem.instance?.ActWindow.TargetSelectText.SetActive(value: true);
+        }
     }
 
     public override void OnEndDrag(PointerEventData eventData)
@@ -36,7 +62,7 @@ internal class DraggableSkill : DragBehaviour, ICastable
             }
         }
 
-        DeactivateSkill();
+        this.StartDelayedCoroutine(DeactivateSkill);
         base.OnEndDrag(eventData);
     }
 
@@ -44,30 +70,16 @@ internal class DraggableSkill : DragBehaviour, ICastable
     {
         base.OnPointerExit(eventData);
 
-        if (_isDragging && !IsSelfActive) {
+        if (_isDragging) {
             PreActivateSkill();
         }
     }
 
     public virtual void PreActivateSkill()
     {
-        if (!IsSelfActive) {
-            if (SkillData.IsCastOnClick()) {
-                BattleSystem.instance.SelectedSkill = SkillData;
-            } else {
-                Cast();
-            }
-        }
     }
 
     public virtual void DeactivateSkill()
     {
-        if (IsSelfActive) {
-            if (SkillData.IsCastOnClick()) {
-                BattleSystem.instance.SelectedSkill = null;
-            } else {
-                Cast();
-            }
-        }
     }
 }

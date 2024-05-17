@@ -39,7 +39,7 @@ internal class CastingLineRenderer : MonoBehaviour
     private Texture2D? _lineTexture;
     private SpriteRenderer? _lineHeadRenderer;
 
-    public static CastingLineRenderer? Instance => BattleSystem.instance?.gameObject.GetOrAddComponent<CastingLineRenderer>();
+    public static CastingLineRenderer? Instance => BattleSystem.instance != null ? BattleSystem.instance.gameObject.GetOrAddComponent<CastingLineRenderer>() : null;
     public bool IsRendering => _lineRenderer?.enabled ?? false;
 
     private int TextureOrientationOffset
