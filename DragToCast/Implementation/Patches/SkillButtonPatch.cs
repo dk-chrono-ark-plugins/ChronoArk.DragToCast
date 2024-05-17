@@ -1,16 +1,14 @@
 ﻿using DragToCast.Api;
 using DragToCast.Helper;
-using DragToCast.Implementation.Components;
+using DragToCast.Implementation.Components.Skills;
 using HarmonyLib;
 
 namespace DragToCast.Implementation.Patches;
 
 #nullable enable
 
-internal class SkillButtonPatch(string guid) : IPatch
+internal class SkillButtonPatch : IPatch
 {
-    private Harmony? _harmony;
-
     public string Id => "skill-button";
     public string Name => Id;
     public string Description => Id;
@@ -18,8 +16,8 @@ internal class SkillButtonPatch(string guid) : IPatch
 
     public void Commit()
     {
-        _harmony ??= new(guid);
-        _harmony.Patch(
+        var harmony = DragToCastMod.Instance!._harmony!;
+        harmony.Patch(
             original: AccessTools.Method(
                 typeof(SkillButton),
                 "Start"
@@ -34,7 +32,6 @@ internal class SkillButtonPatch(string guid) : IPatch
             return;
         }
 
-        __instance.gameObject.GetOrAddComponent<DragBehaviour>();
-        __instance.gameObject.GetOrAddComponent<HoverBehaviour>();
+        __instance.gameObject.GetOrAddComponent<SkillButtonBehaviour>();
     }
 }

@@ -414,21 +414,30 @@
   </ItemGroup>
   <!-- Compile ItemGroup Start-->
   <ItemGroup>
+    <Compile Include="Api\ICastable.cs" />
     <Compile Include="Api\IConfigurable.cs" />
+    <Compile Include="Api\IDraggable.cs" />
     <Compile Include="Api\IPatch.cs" />
+    <Compile Include="Api\ITarget.cs" />
     <Compile Include="DragToCastMod.cs" />
     <Compile Include="Helper\ChildrenIterator.cs" />
     <Compile Include="Helper\ComponentFetch.cs" />
     <Compile Include="Helper\EventTriggerMerge.cs" />
+    <Compile Include="Helper\SkillTargetTypeCheck.cs" />
     <Compile Include="Helper\TextureBlitter.cs" />
+    <Compile Include="Implementation\Components\Skills\BasicSkillBehaviour.cs" />
+    <Compile Include="Implementation\Components\Targets\BattleCharBehaviour.cs" />
+    <Compile Include="Implementation\Components\DragBehaviour.cs" />
+    <Compile Include="Implementation\Components\Skills\DraggableSkill.cs" />
+    <Compile Include="Implementation\Components\HoverBehaviour.cs" />
+    <Compile Include="Implementation\Components\Skills\SkillButtonBehaviour.cs" />
+    <Compile Include="Implementation\Components\Targets\TrashButtonBehaviour.cs" />
     <Compile Include="Implementation\Patches\BasicSkillPatch.cs" />
     <Compile Include="Implementation\Patches\BattleCharPatch.cs" />
     <Compile Include="Implementation\Components\CastingLineRenderer.cs" />
     <Compile Include="Implementation\Patches\BattleSystemPatch.cs" />
     <Compile Include="Helper\BezierLineSmoother.cs" />
-    <Compile Include="Implementation\Components\DragBehaviour.cs" />
-    <Compile Include="Implementation\Components\HoverBehaviour.cs" />
-    <Compile Include="Implementation\Patches\CursorPatch.cs" />
+    <Compile Include="Implementation\Patches\HoverUIPatch.cs" />
     <Compile Include="Implementation\Patches\SkillButtonPatch.cs" />
   </ItemGroup>
   <ItemGroup>

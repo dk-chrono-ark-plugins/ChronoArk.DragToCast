@@ -1,15 +1,17 @@
 ﻿using DragToCast.Api;
 using DragToCast.Helper;
 using DragToCast.Implementation.Components;
+using DragToCast.Implementation.Components.Targets;
 using HarmonyLib;
+using System.Collections.Generic;
 
 namespace DragToCast.Implementation.Patches;
 
 #nullable enable
 
-internal class BattleSystemPatch(string guid) : IPatch
+internal class BattleSystemPatch : IPatch
 {
-    private Harmony? _harmony;
+    public static readonly List<int> PatchedHoverables = [];
 
     public string Id => "battle-system";
     public string Name => Id;
@@ -18,8 +20,8 @@ internal class BattleSystemPatch(string guid) : IPatch
 
     public void Commit()
     {
-        _harmony ??= new(guid);
-        _harmony.Patch(
+        var harmony = DragToCastMod.Instance!._harmony!;
+        harmony.Patch(
             original: AccessTools.Method(
                 typeof(BattleSystem),
                 "Start"
@@ -30,7 +32,8 @@ internal class BattleSystemPatch(string guid) : IPatch
 
     private static void OnStart(BattleSystem __instance)
     {
+        PatchedHoverables.Clear();
         __instance.gameObject.GetOrAddComponent<CastingLineRenderer>();
-        __instance.ActWindow.TrashButton.GetOrAddComponent<HoverBehaviour>();
+        __instance.ActWindow.TrashButton.GetOrAddComponent<TrashButtonBehaviour>();
     }
 }

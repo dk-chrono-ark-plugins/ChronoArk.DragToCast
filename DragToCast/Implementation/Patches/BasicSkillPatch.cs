@@ -1,16 +1,14 @@
 ﻿using DragToCast.Api;
 using DragToCast.Helper;
-using DragToCast.Implementation.Components;
+using DragToCast.Implementation.Components.Skills;
 using HarmonyLib;
 
 namespace DragToCast.Implementation.Patches;
 
 #nullable enable
 
-internal class BasicSkillPatch(string guid) : IPatch
+internal class BasicSkillPatch : IPatch
 {
-    private Harmony? _harmony;
-
     public string Id => "basic-skill";
     public string Name => Id;
     public string Description => Id;
@@ -18,8 +16,8 @@ internal class BasicSkillPatch(string guid) : IPatch
 
     public void Commit()
     {
-        _harmony ??= new(guid);
-        _harmony.Patch(
+        var harmony = DragToCastMod.Instance!._harmony!;
+        harmony.Patch(
             original: AccessTools.Method(
                 typeof(BasicSkill),
                 "Start"
@@ -34,7 +32,6 @@ internal class BasicSkillPatch(string guid) : IPatch
             return;
         }
 
-        __instance.PadTarget.gameObject.GetOrAddComponent<DragBehaviour>();
-        __instance.gameObject.GetOrAddComponent<HoverBehaviour>();
+        __instance.PadTarget.gameObject.GetOrAddComponent<BasicSkillBehaviour>();
     }
 }
