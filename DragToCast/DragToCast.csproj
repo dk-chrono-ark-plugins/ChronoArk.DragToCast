@@ -450,4 +450,13 @@
   </ItemGroup>
   <!-- Compile ItemGroup End-->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>DEL /F /Q "$(TargetDir)System.dll" 2&gt;NUL
+DEL /F /Q "$(TargetDir)System.Core.dll" 2&gt;NUL
+DEL /F /Q "$(TargetDir)$(TargetName).pdb" 2&gt;NUL</PostBuildEvent>
+  </PropertyGroup>
 </Project>
