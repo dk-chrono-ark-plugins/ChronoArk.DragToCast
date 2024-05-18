@@ -109,7 +109,7 @@ internal class CastingLineRenderer : MonoBehaviour
         _lineRenderer.enabled = true;
         _lineHeadRenderer.enabled = true;
 
-        //var lineLength = Vector3.Distance(endPoint, startPoint);
+        var lineLength = Vector3.Distance(endPoint, startPoint);
         var segments = Mathf.FloorToInt(Display.main.systemWidth / 170f);
         _lineRenderer.positionCount = segments + 1;
         var endOfLine = endPoint;
@@ -121,7 +121,8 @@ internal class CastingLineRenderer : MonoBehaviour
                 break;
             }
             case Curvature.BezierQuadratic: {
-                var controlPoint = (startPoint + endPoint) / 2 + Vector3.up * 2;
+                var upOffset = Mathf.Lerp(0.5f, 2f, lineLength / 50f);
+                var controlPoint = (startPoint + endPoint) / 2 + Vector3.up * upOffset;
                 for (int i = 0; i <= segments; ++i) {
                     var point = startPoint.BezierQuadratic(controlPoint, endPoint, i / (float)segments);
                     _lineRenderer.SetPosition(i, point);
@@ -136,8 +137,9 @@ internal class CastingLineRenderer : MonoBehaviour
                 break;
             }
             case Curvature.BezierCubic: {
-                var firstControlPoint = (startPoint + endPoint) / 3 + Vector3.up * 2;
-                var secondControlPoint = (startPoint + endPoint) / 3 * 2 + Vector3.up * 2;
+                var upOffset = Mathf.Lerp(0.5f, 2f, lineLength / 50f);
+                var firstControlPoint = (startPoint + endPoint) / 3 + Vector3.up * upOffset;
+                var secondControlPoint = (startPoint + endPoint) / 3 * 2 + Vector3.up * upOffset;
                 for (int i = 0; i <= segments; ++i) {
                     var point = startPoint.BezierCubic(firstControlPoint, secondControlPoint, endPoint, i / (float)segments);
                     _lineRenderer.SetPosition(i, point);
