@@ -1,5 +1,5 @@
-﻿using DragToCast.Api;
-using DragToCast.Helper;
+﻿using ChronoArkMod.Helper;
+using DragToCast.Api;
 using GameDataEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +14,6 @@ internal class SkillButtonBehaviour : DraggableSkill
     private bool _discardIndicatorOwning;
 
     public override bool Interactable => SkillImpl != null && (SkillImpl.interactable || base.Interactable) && !SkillImpl.IsUseBig && !SkillImpl.IsNowCasting;
-    public override bool IsDelayed => !SkillImpl!.Ani.GetBool("On");
     public override ICastable.CastingType CastType => ICastable.CastingType.SkillButton;
     public override Skill SkillData => SkillImpl!.Myskill;
     public override bool IsSelfActive => SkillImpl?.MainAni.GetBool("Selected") ?? false;
