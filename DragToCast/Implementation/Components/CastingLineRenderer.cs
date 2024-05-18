@@ -9,6 +9,7 @@ namespace DragToCast.Implementation.Components;
 
 #nullable enable
 #pragma warning disable CS0162 // Unreachable code detected
+#pragma warning disable IDE0031 // Use null propagation
 
 internal class CastingLineRenderer : MonoBehaviour
 {
@@ -31,15 +32,16 @@ internal class CastingLineRenderer : MonoBehaviour
     public const string LineTextureFile = "linedot_anri_gave_me_must_use_with_caution.png";
     public const string LineHeadTextureFile = "arrowhead_anri_gave_me_must_use_with_caution.png";
     public const bool UseMyBelovedManaCrystal = false;
+    public const int LineHeadBoundPivot = 5;
 
-    private static TextureOrientation _lineHeadOrientation;
-
+    private TextureOrientation _lineHeadOrientation;
     private Canvas? _canvas;
     private LineRenderer? _lineRenderer;
     private Texture2D? _lineTexture;
     private SpriteRenderer? _lineHeadRenderer;
 
     public static CastingLineRenderer? Instance => BattleSystem.instance != null ? BattleSystem.instance.gameObject.GetOrAddComponent<CastingLineRenderer>() : null;
+
     public bool IsRendering => _lineRenderer?.enabled ?? false;
 
     private int TextureOrientationOffset
@@ -108,7 +110,7 @@ internal class CastingLineRenderer : MonoBehaviour
         _lineHeadRenderer.enabled = true;
 
         //var lineLength = Vector3.Distance(endPoint, startPoint);
-        var segments = Mathf.FloorToInt(Display.main.systemWidth / 170);
+        var segments = Mathf.FloorToInt(Display.main.systemWidth / 170f);
         _lineRenderer.positionCount = segments + 1;
         var endOfLine = endPoint;
         var beforeEndOfLine = startPoint;
@@ -151,9 +153,10 @@ internal class CastingLineRenderer : MonoBehaviour
             }
         }
         // attach line head
-        _lineHeadRenderer.transform.position = endOfLine;
         var tangent = endOfLine - beforeEndOfLine;
         var angle = Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg + TextureOrientationOffset;
+        var pivotOffset = _lineHeadRenderer.bounds.size.magnitude / LineHeadBoundPivot;
+        _lineHeadRenderer.transform.position = endOfLine - tangent.normalized * pivotOffset;
         _lineHeadRenderer.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
