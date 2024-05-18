@@ -49,6 +49,8 @@ internal class BattleCharPatch : IPatch
         } else if (__instance is BattleAlly ally) {
             var @base = __instance.gameObject.GetOrAddComponent<BattleCharBehaviour>();
             @base.Attached = ally;
+        } else {
+            return;
         }
 
         BattleSystemPatch.PatchedHoverables.Add(__instance.GetInstanceID());
