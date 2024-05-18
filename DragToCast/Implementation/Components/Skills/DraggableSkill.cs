@@ -1,5 +1,5 @@
-﻿using DragToCast.Api;
-using DragToCast.Helper;
+﻿using ChronoArkMod.Helper;
+using DragToCast.Api;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,7 +10,8 @@ namespace DragToCast.Implementation.Components.Skills;
 
 internal class DraggableSkill : DragBehaviour, ICastable
 {
-    public override bool Interactable => BattleSystem.instance.AllyTeam.DiscardCount > 0;
+    public override bool Interactable => (BattleSystem.instance?.AllyTeam.DiscardCount ?? 0) > 0;
+    public override bool IsDeferred => !(BattleSystem.instance?.ActWindow.CanAnyMove ?? true);
     public virtual ICastable.CastingType CastType { get; }
     public virtual Skill SkillData => throw new NotImplementedException();
     public virtual bool IsSelfActive { get; }
@@ -62,7 +63,7 @@ internal class DraggableSkill : DragBehaviour, ICastable
             }
         }
 
-        this.StartDelayedCoroutine(DeactivateSkill);
+        this.StartDeferredCoroutine(DeactivateSkill);
         base.OnEndDrag(eventData);
     }
 
@@ -71,7 +72,10 @@ internal class DraggableSkill : DragBehaviour, ICastable
         base.OnPointerExit(eventData);
 
         if (_isDragging) {
-            PreActivateSkill();
+            this.StartDeferredCoroutine(
+                PreActivateSkill,
+                () => _isDragging && Interactable && !IsSelfActive && !IsDeferred
+            );
         }
     }
 

@@ -12,8 +12,8 @@ internal class DragBehaviour : HoverBehaviour, IDraggable
     protected bool _setToCancel;
 
     public virtual bool Interactable { get; }
+    public virtual bool IsDeferred { get; }
     public virtual bool IsDragging => _isDragging;
-    public virtual bool IsDelayed { get; }
     public static DragBehaviour? CurrentDragging { get; protected set; }
 
     private void Update()

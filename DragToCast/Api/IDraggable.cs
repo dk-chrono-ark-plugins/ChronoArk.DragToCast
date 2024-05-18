@@ -12,6 +12,11 @@ internal interface IDraggable : IDragHandler, IEndDragHandler
     bool Interactable { get; }
 
     /// <summary>
+    /// Able to drag, with a deferred start
+    /// </summary>
+    bool IsDeferred { get; }
+
+    /// <summary>
     /// Indicates if this draggable is being dragged
     /// </summary>
     bool IsDragging { get; }

@@ -1,5 +1,5 @@
-﻿using DragToCast.Api;
-using DragToCast.Helper;
+﻿using ChronoArkMod.Helper;
+using DragToCast.Api;
 
 namespace DragToCast.Implementation.Components.Skills;
 
@@ -8,7 +8,6 @@ namespace DragToCast.Implementation.Components.Skills;
 internal class BasicSkillBehaviour : DraggableSkill
 {
     public override bool Interactable => SkillImpl?.interactable ?? false;
-    public override bool IsDelayed => !SkillImpl!.MainAni.GetBool("Enable");
     public override ICastable.CastingType CastType => ICastable.CastingType.BasicSkill;
     public override Skill SkillData => SkillImpl!.buttonData;
     public override bool IsSelfActive => SkillImpl?.MainAni.GetBool("Using") ?? false;
