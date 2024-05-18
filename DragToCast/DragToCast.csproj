@@ -8,7 +8,7 @@
     <LangVersion>12.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <ReferencePath>$(ChronoArkGamePath)/ChronoArk_Data/Managed</ReferencePath>
@@ -19,19 +19,20 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <OutputPath>$(ChronoArkGamePath)\Mod\DragToCast\Assemblies\</OutputPath>
+    <OutputPath>$(ChronoArkGamePath)\Mod\$(AssemblyName)\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>false</Optimize>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <OutputPath>$(ChronoArkGamePath)\Mod\DragToCast\Assemblies\</OutputPath>
+    <OutputPath>$(ChronoArkGamePath)\Mod\$(AssemblyName)\Assemblies\</OutputPath>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>bin\Debug\0Harmony.dll</HintPath>
+    <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\bin\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Accessibility">
       <Private>False</Private>
@@ -48,23 +49,29 @@
     <Reference Include="DOTween">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>bin\Debug\Mono.Cecil.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.10.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\bin\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>bin\Debug\Mono.Cecil.Mdb.dll</HintPath>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.10.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\bin\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>bin\Debug\Mono.Cecil.Pdb.dll</HintPath>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.10.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\bin\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>bin\Debug\Mono.Cecil.Rocks.dll</HintPath>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.10.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\bin\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
-    <Reference Include="MonoMod.RuntimeDetour">
-      <HintPath>bin\Debug\MonoMod.RuntimeDetour.dll</HintPath>
+    <Reference Include="MonoMod.RuntimeDetour, Version=22.1.29.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\bin\MonoMod.RuntimeDetour.dll</HintPath>
     </Reference>
-    <Reference Include="MonoMod.Utils">
-      <HintPath>bin\Debug\MonoMod.Utils.dll</HintPath>
+    <Reference Include="MonoMod.Utils, Version=22.1.29.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Common\bin\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <Private>False</Private>
@@ -414,18 +421,33 @@
   </ItemGroup>
   <!-- Compile ItemGroup Start-->
   <ItemGroup>
+    <Compile Include="..\..\Common\Helper\BezierLineSmoother.cs">
+      <Link>Helper\BezierLineSmoother.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Helper\ChildrenIterator.cs">
+      <Link>Helper\ChildrenIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Helper\ComponentFetch.cs">
+      <Link>Helper\ComponentFetch.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Helper\DelayedCoroutine.cs">
+      <Link>Helper\DelayedCoroutine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Helper\EventTriggerMerge.cs">
+      <Link>Helper\EventTriggerMerge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Helper\SkillTargetTypeCheck.cs">
+      <Link>Helper\SkillTargetTypeCheck.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Helper\TextureBlitter.cs">
+      <Link>Helper\TextureBlitter.cs</Link>
+    </Compile>
     <Compile Include="Api\ICastable.cs" />
     <Compile Include="Api\IConfigurable.cs" />
     <Compile Include="Api\IDraggable.cs" />
     <Compile Include="Api\IPatch.cs" />
     <Compile Include="Api\ITarget.cs" />
     <Compile Include="DragToCastMod.cs" />
-    <Compile Include="Helper\ChildrenIterator.cs" />
-    <Compile Include="Helper\ComponentFetch.cs" />
-    <Compile Include="Helper\DelayedCoroutine.cs" />
-    <Compile Include="Helper\EventTriggerMerge.cs" />
-    <Compile Include="Helper\SkillTargetTypeCheck.cs" />
-    <Compile Include="Helper\TextureBlitter.cs" />
     <Compile Include="Implementation\Components\Skills\BasicSkillBehaviour.cs" />
     <Compile Include="Implementation\Components\Targets\BattleCharBehaviour.cs" />
     <Compile Include="Implementation\Components\DragBehaviour.cs" />
@@ -437,7 +459,6 @@
     <Compile Include="Implementation\Patches\BattleCharPatch.cs" />
     <Compile Include="Implementation\Components\CastingLineRenderer.cs" />
     <Compile Include="Implementation\Patches\BattleSystemPatch.cs" />
-    <Compile Include="Helper\BezierLineSmoother.cs" />
     <Compile Include="Implementation\Patches\HoverUIPatch.cs" />
     <Compile Include="Implementation\Patches\SkillButtonPatch.cs" />
   </ItemGroup>
